@@ -2,12 +2,16 @@ package com.encryption.cd;
 
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.io.Encoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -24,11 +28,14 @@ public class StarterEncryptionController {
     HashMap<String, User> database = new HashMap<>();
 
     @Value("${jwt.key}")
-    private Key secret;
+    private String secret;
+
+//    SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.ES256);
+//    String base64Key = Encoders.BASE64URL.encode(key.getEncoded());
 
     //env import
-//    @Autowired
-//    Environment env;
+    @Autowired
+    Environment env;
 
     @GetMapping("/test")
     public String testGet() {
@@ -57,6 +64,11 @@ public class StarterEncryptionController {
         return user;
     }
 
+    private Key getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
     //route for sign-in test (bcrypt compare + jwt)
     @PutMapping("/signin")
     public String signIn(@RequestBody User user) {
@@ -75,21 +87,18 @@ public class StarterEncryptionController {
             Date expiresAt = Date.from(now.plus(2, ChronoUnit.HOURS));
 
 
-
-
-
             String jwt = Jwts.builder()
                     .setSubject("user-auth")
                     .setIssuedAt(issuedAt)
                     .setExpiration(expiresAt)
                     .claim("id", loginUser.id)
-                    .signWith(secret, SignatureAlgorithm.HS256)
+                    .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                     .compact();
-
+            return jwt;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return "success!";
+        return "jwt";
     }
 
     @GetMapping("/testjwt")
