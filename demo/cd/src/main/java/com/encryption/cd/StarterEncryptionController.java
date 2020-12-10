@@ -98,16 +98,20 @@ public class StarterEncryptionController {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return "jwt";
+        return "Failed";
     }
 
     @GetMapping("/testjwt")
-    public String testJWT (
-            //grab jwt from body
-    ) {
+    public String testJWT (@RequestHeader String jwt) {
+        try {
+            Jwts.parserBuilder().setSigningKey(secret.getBytes()).build().parseClaimsJws(jwt);
+            return "Valid JWT";
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return "Invalid JWT";
+        }
 
-        return "temp";
     }
 
 }
