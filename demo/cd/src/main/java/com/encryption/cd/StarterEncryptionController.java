@@ -60,10 +60,14 @@ public class StarterEncryptionController {
             String unhashed = user.password;
             String hashedPW = loginUser.password;
             boolean credsMatch = BCrypt.checkpw(unhashed, hashedPW);
+            if (!credsMatch) {
+                return "Login failed: credentials don't match";
+            }
+            return "Login worked!";
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
+        return "success!";
     }
 
     @GetMapping("/testjwt")
