@@ -19,11 +19,15 @@ import java.util.HashMap;
 public class StarterEncryptionController {
 
     //create database
+    HashMap<String, User> map = new HashMap<>();
 
     //env import
+    @Autowired
+    Environment env;
 
     @GetMapping("/test")
     public String testGet() {
+
         return "Hey! The test worked!!";
     }
 
@@ -36,6 +40,7 @@ public class StarterEncryptionController {
     @PostMapping("/signup")
     public String signUp(
             //grab userdata from body
+
     ) {
 
 
