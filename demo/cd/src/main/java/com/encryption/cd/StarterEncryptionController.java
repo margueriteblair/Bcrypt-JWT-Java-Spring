@@ -2,11 +2,13 @@ package com.encryption.cd;
 
 
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -21,9 +23,12 @@ public class StarterEncryptionController {
     //create database
     HashMap<String, User> database = new HashMap<>();
 
+    @Value("${jwt.key}")
+    private Key secret;
+
     //env import
-    @Autowired
-    Environment env;
+//    @Autowired
+//    Environment env;
 
     @GetMapping("/test")
     public String testGet() {
@@ -69,13 +74,16 @@ public class StarterEncryptionController {
             Date issuedAt = Date.from(now);
             Date expiresAt = Date.from(now.plus(2, ChronoUnit.HOURS));
 
-            String jwtKey = env.getProperty("jwt.key");
+
+
+
 
             String jwt = Jwts.builder()
                     .setSubject("user-auth")
                     .setIssuedAt(issuedAt)
                     .setExpiration(expiresAt)
                     .claim("id", loginUser.id)
+                    .signWith(secret, SignatureAlgorithm.HS256)
                     .compact();
 
         } catch (Exception ex) {
