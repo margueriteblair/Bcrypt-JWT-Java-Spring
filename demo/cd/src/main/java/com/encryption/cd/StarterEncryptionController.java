@@ -102,9 +102,9 @@ public class StarterEncryptionController {
     }
 
     @GetMapping("/testjwt")
-    public String testJWT (@RequestHeader String jwt) {
+    public String testJWT (@RequestBody String jwt) {
         try {
-            Jwts.parserBuilder().setSigningKey(secret.getBytes()).build().parseClaimsJws(jwt);
+            Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(jwt);
             return "Valid JWT";
 
         } catch (Exception ex) {
