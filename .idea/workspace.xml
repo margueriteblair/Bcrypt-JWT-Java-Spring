@@ -23,6 +23,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="273456ab-cfe4-42a5-a578-86eabc18ed35" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/demo/cd/src/main/java/com/encryption/cd/StarterEncryptionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/cd/src/main/java/com/encryption/cd/StarterEncryptionController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

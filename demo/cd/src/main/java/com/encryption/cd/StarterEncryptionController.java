@@ -66,8 +66,18 @@ public class StarterEncryptionController {
             //now that we know the passwords match, we can create the jwt
             Instant now = Instant.now();
 
-            Date signedAt = Date.from(now);
+            Date issuedAt = Date.from(now);
             Date expiresAt = Date.from(now.plus(2, ChronoUnit.HOURS));
+
+            String jwtKey = env.getProperty("jwt.key");
+
+            String jwt = Jwts.builder()
+                    .setSubject("user-auth")
+                    .setIssuedAt(issuedAt)
+                    .setExpiration(expiresAt)
+                    .claim("id", loginUser.id)
+                    .compact();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
