@@ -63,7 +63,11 @@ public class StarterEncryptionController {
             if (!credsMatch) {
                 return "Login failed: credentials don't match";
             }
-            return "Login worked!";
+            //now that we know the passwords match, we can create the jwt
+            Instant now = Instant.now();
+
+            Date signedAt = Date.from(now);
+            Date expiresAt = Date.from(now.plus(2, ChronoUnit.HOURS));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
