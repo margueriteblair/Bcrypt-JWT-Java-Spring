@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class StarterEncryptionController {
 
     //create database
-    HashMap<String, User> map = new HashMap<>();
+    HashMap<String, User> database = new HashMap<>();
 
     //env import
     @Autowired
@@ -39,11 +39,15 @@ public class StarterEncryptionController {
     //route for signup test (bcrypt hash)
     @PostMapping("/signup")
     public String signUp(
+            @RequestBody User user
             //grab userdata from body
-
     ) {
+        //hash the password is the first step
+        String hashedPassword = BCrypt.hashpw(user.password, BCrypt.gensalt());
+        user.password = hashedPassword;
+        //next step is to then store in the DB
 
-
+        database.put(user.username, user);
         return "temp";
     }
 
